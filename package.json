@@ -1,0 +1,11 @@
+{
+  "name": "js-inspector.vim",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "esprima": "1.0.4",
+    "ast-scope": "0.3.0"
+  }
+}
