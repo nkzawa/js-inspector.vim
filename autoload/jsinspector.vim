@@ -1,10 +1,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+
 let g:jsinspector_node = get(g:, 'jsinspector_node', 'node')
 
 let s:script = simplify(expand('<sfile>:p:h') . '/../index.js')
-
 
 function! jsinspector#search()
   let src = join(getline(1, '$'), "\n")
@@ -23,6 +23,9 @@ function! jsinspector#search()
   endif
 
   let data = eval(json_str)
+  let b:jsinspector_variable = data.name
+  let b:jsinspector_positions = data.positions
+
   call s:match(data.name, data.positions)
   call jsinspector#next()
 
@@ -111,9 +114,10 @@ function! jsinspector#rename()
   let pos = getpos('.')
   let line = pos[1]
   let column = pos[2]
+  let length = len(b:jsinspector_variable)
 
   for p in b:jsinspector_positions
-    if p[0] != line || p[1] > column
+    if p[0] != line || p[1] > column || (p[1] + length + 1) < column
       continue
     endif
 
@@ -123,14 +127,31 @@ function! jsinspector#rename()
       return
     endif
 
-    let positions = copy(b:jsinspector_positions)
-    call remove(positions, index(positions, p))
-    let patterns = map(positions, 's:search_pattern(b:jsinspector_variable, v:val)')
+    if len(b:jsinspector_positions) > 1
+      let offset = len(name) - length
+      let positions = deepcopy(b:jsinspector_positions)
+      call remove(positions, index(positions, p))
 
-    if !empty(patterns)
+      for _p in positions
+        if _p[0] != p[0]
+          continue
+        endif
+
+        if _p[1] > p[1]
+          " adjust positions for substitute
+          let _p[1] += offset
+        elseif _p[1] < p[1]
+          " calculate the new cursor position
+          let pos[2] += offset
+        endif
+      endfor
+
+      let patterns = map(positions, 's:search_pattern(b:jsinspector_variable, v:val)')
       silent execute printf('%%s/%s/%s/g', join(patterns, '\|'), name)
       call setpos('.', pos)
     endif
+
+    call s:renamed(name)
     call s:match(name, b:jsinspector_positions)
     return
   endfor
@@ -142,9 +163,6 @@ function! jsinspector#rename_and_clear()
 endfunction
 
 function! s:match(name, positions)
-  let b:jsinspector_variable = a:name
-  let b:jsinspector_positions = a:positions
-
   call clearmatches()
   for pos in a:positions
     call matchadd('Search', s:search_pattern(a:name, pos))
@@ -162,6 +180,24 @@ endfunction
 function! s:search_pattern(name, pos)
   return printf('\%%%dl\%%>%dc\%%<%dc%s',
       \ a:pos[0], a:pos[1] - 1, a:pos[1] + 1, escape(a:name, '$'))
+endfunction
+
+function! s:renamed(name)
+  let margin = len(a:name) - len(b:jsinspector_variable)
+  let b:jsinspector_variable = a:name
+  let line = 0
+  let offset = 0
+
+  for p in b:jsinspector_positions
+    if p[0] != line
+      " on a new line
+      let line = p[0]
+      let offset = 0
+    else
+      let offset += margin
+      let p[1] += offset
+    endif
+  endfor
 endfunction
 
 

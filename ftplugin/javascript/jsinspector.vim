@@ -11,7 +11,7 @@ let b:jsinspector_searching = 0
 let b:jsinspector_variable = ''
 let b:jsinspector_positions = []
 
-nnoremap <buffer><silent> <LocalLeader>* :call jsinspector#search()<CR>
+nnoremap <buffer><silent> <Space>* :call jsinspector#search()<CR>
 
 
 let &cpo = s:save_cpo
