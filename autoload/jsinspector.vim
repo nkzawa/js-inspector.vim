@@ -41,8 +41,7 @@ function! jsinspector#search()
   augroup rename_variable
     autocmd!
     autocmd CursorMovedI <buffer> :call jsinspector#rename()
-    "autocmd InsertLeave <buffer> :call jsinspector#rename_and_clear()
-    autocmd InsertLeave <buffer> :call jsinspector#rename()
+    autocmd InsertLeave <buffer> :call jsinspector#rename_and_clear()
   augroup END
 endfunction
 
@@ -60,6 +59,9 @@ function! jsinspector#clear()
   nunmap <buffer> /
   nunmap <buffer> ?
 
+  augroup rename_variable
+    autocmd!
+  augroup END
   augroup! rename_variable
 endfunction
 
