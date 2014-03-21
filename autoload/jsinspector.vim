@@ -4,6 +4,7 @@ set cpo&vim
 
 function! jsinspector#keymaps()
   autocmd FileType javascript nmap <buffer> <LocalLeader>* <Plug>JsInspectorSearchForward
+  autocmd FileType javascript nmap <buffer> <LocalLeader># <Plug>JsInspectorSearchBackward
 
   autocmd User JsInspectorSearchEnter nmap <buffer> n <Plug>JsInspectorSearchNext
   autocmd User JsInspectorSearchEnter nmap <buffer> N <Plug>JsInspectorSearchPrev

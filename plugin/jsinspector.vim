@@ -3,6 +3,7 @@ set cpo&vim
 
 
 nmap <silent> <Plug>JsInspectorSearchForward :call jsinspector#search#forward()<CR>
+nmap <silent> <Plug>JsInspectorSearchBackward :call jsinspector#search#backward()<CR>
 nmap <silent> <Plug>JsInspectorSearchNext :call jsinspector#search#next()<CR>
 nmap <silent> <Plug>JsInspectorSearchPrev :call jsinspector#search#prev()<CR>
 
