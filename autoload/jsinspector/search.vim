@@ -59,14 +59,14 @@ function! jsinspector#search#rename()
   let length = len(b:jsinspector_search_variable)
 
   for p in b:jsinspector_search_positions
-    if p[0] != line || p[1] > column || (p[1] + length + 1) < column
+    if p[0] != line || p[1] > column
       continue
     endif
 
     " extract variable name
-    let name = matchstr(getline(line)[(p[1] - 1):], '^[0-9a-zA-Z_$]*')
+    let name = matchstr(getline(p[0])[(p[1] - 1):], '^[0-9a-zA-Z_$]*')
     if name ==# b:jsinspector_search_variable
-      return
+      continue
     endif
 
     if len(b:jsinspector_search_positions) > 1
