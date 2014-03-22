@@ -124,6 +124,9 @@ exports.analyze = function(ast) {
         break;
 
       case 'MemberExpression':
+        if (node.computed) {
+          scope.reference(node.property);
+        }
         break;
 
       case 'NewExpression':

@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 
 module.exports = Variable;
 
@@ -11,7 +13,7 @@ function Variable(node, scope) {
     switch (node.type) {
       case 'Identifier':
       case 'ThisExpression':
-        name = node.name;
+        name = utils.extractName(node);
         break;
       default:
         throw new Error('Invalid node type: ' + node.type);

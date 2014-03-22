@@ -6,6 +6,6 @@
   "license": "MIT",
   "dependencies": {
     "esprima": "1.0.4",
-    "ast-scope": "0.3.0"
+    "ast-scope": "0.3.1"
   }
 }

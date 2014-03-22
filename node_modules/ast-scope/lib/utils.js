@@ -11,3 +11,12 @@ exports.extractId = function(node) {
     return exports.extractId(node.callee);
   }
 };
+
+exports.extractName = function(node) {
+  switch (node.type) {
+  case 'Identifier':
+    return node.name;
+  case 'ThisExpression':
+    return 'this';
+  }
+};

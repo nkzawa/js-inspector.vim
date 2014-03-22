@@ -1,6 +1,7 @@
 var Variable = require('./variable');
 var Assignment = require('./assignment');
 var Reference = require('./reference');
+var utils = require('./utils');
 
 
 module.exports = Scope;
@@ -35,7 +36,7 @@ Scope.prototype.define = function(node) {
     name = node;
     node = null;
   } else {
-    name = node.name;
+    name = utils.extractName(node);
   }
 
   return this.variables[name] = this.variables[name] || new Variable(node || name, this);
@@ -62,10 +63,8 @@ Scope.prototype.undefined = function(node) {
   } else {
     switch (node.type) {
     case 'Identifier':
-      name = node.name;
-      break;
     case 'ThisExpression':
-      name = 'this';
+      name = utils.extractName(node);
       break;
     default:
       throw new Error('Invalid node type: ' + node.type);
@@ -84,7 +83,7 @@ Scope.prototype.undefined = function(node) {
 
 Scope.prototype.resolveVariable = function(name) {
   if (typeof name !== 'string') {
-    name = name.name;
+    name = utils.extractName(name);
   }
 
   var scope = this;
