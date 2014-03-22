@@ -3,6 +3,7 @@ js-inspector.vim
 
 A Vim plugin for support JavaScript code development based on AST analysis.
 
+![screenshot](https://f.cloud.github.com/assets/775227/2490282/c9651e68-b19f-11e3-9e0c-cb4578b3c872.gif)
 
 ## Installation
 Use your preferred installation method.

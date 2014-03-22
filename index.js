@@ -14,7 +14,6 @@ process.stdin.on('end', function() {
   main(data);
 });
 
-
 function main(data) {
   try {
     var ast = esprima.parse(data, {loc: true, tolerant: true});
