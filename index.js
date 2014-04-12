@@ -78,9 +78,7 @@ function findVariable(ast, line, column) {
     });
 
     // variables on the line
-    Object.keys(scope.variables).map(function(k) {
-      return scope.variables[k];
-    }).forEach(function(v) {
+    scope.variables.forEach(function(v) {
       if (!v.node) return;
 
       if (test(v.node)) {
