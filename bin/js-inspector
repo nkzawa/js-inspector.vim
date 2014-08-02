@@ -25,13 +25,13 @@ function main(data) {
   try {
     var ast = esprima.parse(data, {loc: true, tolerant: true});
   } catch (e) {
-    console.error(e.toString());
+    process.stderr.write(e.toString());
     process.exit(1);
   }
 
   var variable = findVariable(ast, line, column);
   if (!variable) {
-    console.error('Variable not found');
+    process.stderr.write('No variable under cursor');
     process.exit(1);
   }
 

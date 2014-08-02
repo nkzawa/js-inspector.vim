@@ -117,7 +117,7 @@ function! s:search(opposite)
 
   let json_str = system(cmd, src)
   if v:shell_error
-    echoe json_str
+    echoh ErrorMsg | echo json_str | echohl None
     return
   endif
 
