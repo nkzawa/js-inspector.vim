@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --reporter dot"
   },
   "dependencies": {
     "esprima": "1.2.2",
