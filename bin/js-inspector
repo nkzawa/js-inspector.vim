@@ -1,6 +1,7 @@
+#!/usr/bin/env node
+
 var esprima = require('esprima');
 var as = require('ast-scope');
-
 
 var line = parseInt(process.argv[2], 10);
 var column = parseInt(process.argv[3], 10);
@@ -15,6 +16,12 @@ process.stdin.on('end', function() {
 });
 
 function main(data) {
+  var _hasShebang = hasShebang(data);
+  if (_hasShebang) {
+    data = removeShebang(data);
+    line--;
+  }
+
   try {
     var ast = esprima.parse(data, {loc: true, tolerant: true});
   } catch (e) {
@@ -46,10 +53,19 @@ function main(data) {
   }).map(function(loc) {
     var start = loc.start;
     // a column of vim starts from 1.
-    return [start.line, start.column + 1];
+    return [start.line + (_hasShebang ? 1 : 0), start.column + 1];
   });
 
   process.stdout.write(JSON.stringify({name: variable.name, positions: positions}));
+}
+
+function hasShebang(data) {
+  return '#!' === data.slice(0, 2);
+}
+
+function removeShebang(data) {
+  var pos = data.indexOf('\n');
+  return data.slice(pos + 1);
 }
 
 function findVariable(ast, line, column) {

@@ -2,7 +2,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:script = simplify(expand('<sfile>:p:h') . '/../../index.js')
+let s:script = simplify(expand('<sfile>:p:h') . '/../../bin/js-inspector')
 
 function! jsinspector#search#forward()
   call s:search(0)
@@ -105,11 +105,10 @@ function! jsinspector#search#rename_and_clear()
 endfunction
 
 function! s:search(opposite)
-  let node = get(g:, 'jsinspector_node', 'node')
   let src = join(getline(1, '$'), "\n")
   let pos = getpos('.')
-  let cmd = printf('%s %s %d %d',
-      \ shellescape(node), shellescape(s:script), pos[1], pos[2] - 1)
+  let cmd = printf('%s %d %d',
+      \ shellescape(s:script), pos[1], pos[2] - 1)
 
   " clear highlights
   let @/ = ''
